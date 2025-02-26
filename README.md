@@ -63,17 +63,27 @@ This tutorial walks through a complete end-to-end scenario for processing stream
 2. Use SQL-like syntax to process the data. For example:
 
 ```sql
+-- Query 1: Output raw events
+SELECT
+    *
+INTO
+    [RawBlobStorageOutput]
+FROM
+    [IoTHubInput];
+
+-- Query 2: Output aggregated data per device every minute
 SELECT
     deviceId,
     AVG(temperature) AS avgTemperature,
     System.Timestamp AS eventTime
 INTO
-    [PowerBIOutput]
+    [AggregatePowerBIOutput]
 FROM
     [IoTHubInput]
 GROUP BY
     deviceId,
-    TumblingWindow(minute, 1)
+    TumblingWindow(minute, 1);
+
 ```
 
 ---
